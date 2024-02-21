@@ -68,7 +68,6 @@ function actualizarModalCarrito() {
   }
 }
 
-
 function agregarAlCarrito(elemento) {
   let zapatillaAgregada = productosCarrito.find(zapatilla => zapatilla.id == elemento.id);
   if (zapatillaAgregada === undefined) {
@@ -83,7 +82,6 @@ function agregarAlCarrito(elemento) {
   }
   document.getElementById("contar-items").innerHTML = productosCarrito.length;
 }
-
 
 function mostrar_catalogo() {
   let containerZapatillas = document.getElementById("catalogoHTML");
@@ -180,8 +178,6 @@ function mostrarMensajeCompraRealizada() {
     text: "Gracias por tu compra. Te enviaremos un correo electrónico con los detalles de tu pedido.",
   });
 }
-
-
 
 document.getElementById("botonFinalizarCompra").addEventListener("click", () => {
   if (productosCarrito.length > 0) {
