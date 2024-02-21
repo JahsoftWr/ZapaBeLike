@@ -21,6 +21,70 @@ const zapatilla6 = new Zapatillas(6, "Vans", "Old Skool", 64400, "../assets/imag
 
 const zapatillas = [zapatilla1, zapatilla2, zapatilla3, zapatilla4, zapatilla5, zapatilla6];
 
+function actualizarModalCarrito() {
+  // Obtener la lista de productos del carrito
+  let productosCarrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
+  // Vaciar el contenido del modal del carrito
+  document.getElementById("modal-bodyCarrito").innerHTML = "";
+
+  // Si hay productos en el carrito, mostrarlos en el modal
+  if (productosCarrito.length > 0) {
+    let total = 0;
+
+    for (let producto of productosCarrito) {
+      let elementoProducto = document.createElement("div");
+      elementoProducto.className = "d-flex justify-content-between mb-2";
+
+      let imagenProducto = document.createElement("img");
+      imagenProducto.src = `assets/${producto.imagen}`;
+      imagenProducto.style.width = "100px";
+      imagenProducto.style.height = "100px";
+      elementoProducto.appendChild(imagenProducto);
+
+      let infoProducto = document.createElement("div");
+      infoProducto.className = "text-start ps-3";
+
+      let nombreProducto = document.createElement("p");
+      nombreProducto.textContent = `${producto.marca} ${producto.modelo}`;
+      infoProducto.appendChild(nombreProducto);
+
+      let precioProducto = document.createElement("p");
+      precioProducto.textContent = `Precio: $${producto.precio}`;
+      infoProducto.appendChild(precioProducto);
+
+      elementoProducto.appendChild(infoProducto);
+
+      document.getElementById("modal-bodyCarrito").appendChild(elementoProducto);
+
+      total += producto.precio;
+    }
+
+    // Mostrar el precio total
+    document.getElementById("precioTotal").textContent = `Total: $${total}`;
+  } else {
+    // Mostrar un mensaje si no hay productos en el carrito
+    document.getElementById("modal-bodyCarrito").innerHTML = "<p>El carrito está vacío.</p>";
+  }
+}
+
+
+function agregarAlCarrito(elemento) {
+  let zapatillaAgregada = productosCarrito.find(zapatilla => zapatilla.id == elemento.id);
+  if (zapatillaAgregada === undefined) {
+    productosCarrito.push(elemento);
+    localStorage.setItem("carrito", JSON.stringify(productosCarrito));
+    actualizarModalCarrito();
+  } else {
+    Swal.fire({
+      icon: "error",
+      title: "Lo siento, no puedes agregar más de un producto.",
+    });
+  }
+  document.getElementById("contar-items").innerHTML = productosCarrito.length;
+}
+
+
 function mostrar_catalogo() {
   let containerZapatillas = document.getElementById("catalogoHTML");
   containerZapatillas.innerHTML = "";
@@ -80,21 +144,7 @@ function mostrar_catalogoBusqueda(zapatillas_encontradas) {
   catalogoNODOS.innerHTML = catalogoHTML;
 }
 
-function agregarAlCarrito(elemento) {
-  let zapatillaAgregada = productosCarrito.find(zapatilla => zapatilla.id == elemento.id);
-  if (zapatillaAgregada === undefined) {
-    productosCarrito.push(elemento);
-    localStorage.setItem("carrito", JSON.stringify(productosCarrito));
-    actualizarModalCarrito();
-  } else {
-    Swal.fire({
-      icon: "error",
-      title: "Lo siento, no puedes agregar más de un producto.",
-    });
-  }
 
-  document.getElementById("contar-items").innerHTML = productosCarrito.length;
-}
 
 function buscarZapatillas(terminoBusqueda) {
   terminoBusqueda = terminoBusqueda.toLowerCase();
