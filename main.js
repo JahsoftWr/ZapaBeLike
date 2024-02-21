@@ -144,8 +144,6 @@ function mostrar_catalogoBusqueda(zapatillas_encontradas) {
   catalogoNODOS.innerHTML = catalogoHTML;
 }
 
-
-
 function buscarZapatillas(terminoBusqueda) {
   terminoBusqueda = terminoBusqueda.toLowerCase();
   const zapatillasEncontradas = zapatillas.filter(zapatilla =>
@@ -166,5 +164,37 @@ document.getElementById("busquedaInput").addEventListener("keyup", (event) => {
     buscarZapatillas(busquedaInput.value);
   }
 });
+
+function vaciarCarrito() {
+  localStorage.removeItem("carrito");
+  productosCarrito = [];
+  document.getElementById("modal-bodyCarrito").innerHTML = "<p>El carrito está vacío.</p>";
+  document.getElementById("contar-items").innerHTML = 0;
+  document.getElementById("precioTotal").textContent = "";
+}
+
+function mostrarMensajeCompraRealizada() {
+  Swal.fire({
+    icon: "success",
+    title: "¡Compra realizada!",
+    text: "Gracias por tu compra. Te enviaremos un correo electrónico con los detalles de tu pedido.",
+  });
+}
+
+
+
+document.getElementById("botonFinalizarCompra").addEventListener("click", () => {
+  if (productosCarrito.length > 0) {
+    vaciarCarrito();
+    mostrarMensajeCompraRealizada();
+  } else {
+    Swal.fire({
+      icon: "warning",
+      title: "Carrito vacío",
+      text: "No hay productos en el carrito para realizar una compra.",
+    });
+  }
+});
+
 
 mostrar_catalogo();
